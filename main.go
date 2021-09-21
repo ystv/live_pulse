@@ -37,7 +37,6 @@ func ping(w http.ResponseWriter, r *http.Request) {
 			//log.Println("readErr:", err) // not needed, triggers every page close
 			break
 		}
-		//log.Printf("receive error: %s", message)
 		rollingMutex.Lock()
 		streamNameMapRolling[string(message)]++
 		rollingMutex.Unlock()
@@ -60,10 +59,7 @@ func data(w http.ResponseWriter, _ *http.Request) {
 }
 
 func home(w http.ResponseWriter, _ *http.Request) {
-	_, err := w.Write([]byte("Hello there!"))
-	if err != nil {
-		return
-	}
+	w.Write([]byte("Hello there!"))
 }
 
 func periodicWiper() {
@@ -77,7 +73,6 @@ func periodicWiper() {
 		staleMutex.Unlock()
 		streamNameMapRolling = make(map[string]int)
 		rollingMutex.Unlock()
-		//fmt.Println("wiped")
 	}
 }
 
